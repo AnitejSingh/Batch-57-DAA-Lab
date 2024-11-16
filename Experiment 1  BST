@@ -1,58 +1,65 @@
-#include <stdio.h> 
-#include <stdlib.h> 
- 
-struct node { 
-    int data; 
-    struct node* left; 
-    struct node* right; 
-}; 
- 
-struct node* createnode(int data) { 
-    struct node* newnode = (struct node*)malloc(sizeof(struct node)); 
-    newnode->data = data; 
-    newnode->left = NULL; 
-    newnode->right = NULL; 
-    return newnode; 
-} 
- 
-struct node* insert(struct node* root, int data) { 
-    if (root == NULL) { 
-        return createnode(data); 
-    } 
- 
-    if (data < root->data) { 
-        root->left = insert(root->left, data); 
-    } else if (data > root->data) { 
-        root->right = insert(root->right, data); 
-    } 
- 
-    return root; 
-} 
- 
-void inorderTraversal(struct node* root) { 
-    if (root != NULL) { 
-        inorderTraversal(root->left); 
-        printf("%d ", root->data); 
-        inorderTraversal(root->right); 
-    } 
-} 
- 
-int main() { 
-    struct node* root = NULL; 
-    int n, i, value; 
- 
-    printf("Enter the number of elements to insert in the BST: "); 
-    scanf("%d", &n); 
- 
-    for (i = 0; i < n; i++) { 
-        printf("Enter value %d: ", i + 1); 
-        scanf("%d", &value); 
-        root = insert(root, value); 
-    } 
- 
-    printf("In-order traversal of the BST: "); 
-    inorderTraversal(root); 
-    printf("\n"); 
- 
-    return 0; 
+#include <stdio.h>
+#include <stdlib.h>
+int main() {
+struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+};
+
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+struct Node* insertRecursive(struct Node* root, int data) {
+    if (root == NULL) {
+        return createNode(data);
+    }
+    if (data < root->data) {
+        root->left = insertRecursive(root->left, data);
+    } else if (data > root->data) {
+        root->right = insertRecursive(root->right, data);
+    }
+    return root;
+}
+struct Node* insertIterative(struct Node* root, int data) {
+    struct Node* newNode = createNode(data);
+    if (root == NULL) {
+        return newNode;
+    }
+    
+    struct Node* current = root;
+    struct Node* parent = NULL;
+
+    while (current != NULL) {
+        parent = current;
+        if (data < current->data) {
+            current = current->left;
+        } else if (data > current->data) {
+            current = current->right;
+        } else {
+            free(newNode);
+            return root;
+        }
+    }
+
+    if (data < parent->data) {
+        parent->left = newNode;
+    } else {
+        parent->right = newNode;
+    }
+    return root;
+}
+void inOrderTraversal(struct Node* root) {
+    if (root != NULL) {
+        inOrderTraversal(root->left);
+        printf("%d ", root->data);
+        inOrderTraversal(root->right);
+    }
+}
+return 0;
 }
